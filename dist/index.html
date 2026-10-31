@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f2e8">
+  <meta name="description" content="A gentler home for unfinished business. Turn your tasks into friendly ghosts, focus on one, and let it go.">
+  <meta property="og:title" content="GhostList | Unfinished business, be gone">
+  <meta property="og:description" content="Turn unfinished tasks into friendly ghosts. One small step. One less haunting.">
+  <title>GhostList | Unfinished business, be gone</title>
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <a class="skip" href="#hauntings">Skip to your tasks</a>
+  <svg class="svg-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <symbol id="ghost" viewBox="0 0 120 128">
+        <path d="M20 104V53C20 27 37 13 60 13s40 14 40 40v51c0 8-8 10-14 2l-7-9-11 12c-5 5-11 5-16 0L41 97l-7 9c-6 8-14 6-14-2Z" fill="currentColor" stroke="var(--ghost-outline, #23382d)" stroke-width="2.6" stroke-linejoin="round"/>
+        <ellipse cx="46" cy="57" rx="4.5" ry="7" fill="#23382d"/>
+        <ellipse cx="73" cy="57" rx="4.5" ry="7" fill="#23382d"/>
+        <path d="M54 72q6 6 12 0" fill="none" stroke="#23382d" stroke-width="2.5" stroke-linecap="round"/>
+        <ellipse cx="35" cy="68" rx="6" ry="3" fill="#df896c" opacity=".55"/>
+        <ellipse cx="84" cy="68" rx="6" ry="3" fill="#df896c" opacity=".55"/>
+      </symbol>
+      <symbol id="spark" viewBox="0 0 24 24">
+        <path d="M12 1l2.8 8.2L23 12l-8.2 2.8L12 23l-2.8-8.2L1 12l8.2-2.8Z" fill="currentColor"/>
+      </symbol>
+      <symbol id="check" viewBox="0 0 24 24">
+        <path d="m5 12 4 4L19 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </symbol>
+      <symbol id="clock" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+      </symbol>
+    </defs>
+  </svg>
+  <div class="site-shell">
+    <header class="site-header">
+      <a class="brand" href="./" aria-label="GhostList home">
+        <svg aria-hidden="true"><use href="#ghost"/></svg><span>GhostList<span class="brand-dot">.</span></span>
+      </a>
+      <span class="header-note">a little less unfinished business</span>
+      <button class="text-button" id="how-button">The little guide <span aria-hidden="true">&#8599;</span></button>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="live-dot"></span> A GENTLER WAY TO GET THINGS DONE</p>
+          <h1 id="hero-title">Unfinished business,<br><em>be gone.</em><svg class="heading-spark" aria-hidden="true"><use href="#spark"/></svg></h1>
+          <p class="hero-description">Those little things hanging over you? Give them a home.<br class="desktop-break"> Pick one, take a small step, and let it go.</p>
+          <div class="hero-actions">
+            <button class="button primary" id="add-button"><span class="plus" aria-hidden="true">+</span> Summon a task <kbd>N</kbd></button>
+            <span class="quiet-note">One less ghost. A little more headspace.</span>
+          </div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <svg viewBox="0 0 430 315" role="presentation">
+            <defs>
+              <pattern id="dots" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="1" fill="#bec4b3"/></pattern>
+            </defs>
+            <ellipse cx="238" cy="175" rx="148" ry="125" fill="url(#dots)"/>
+            <circle cx="289" cy="104" r="63" fill="#efc66f"/>
+            <circle cx="312" cy="86" r="53" fill="#f6f2e8"/>
+            <path d="M50 269q120-34 322-3" fill="none" stroke="#a2ad97" stroke-width="1.5"/>
+            <ellipse cx="226" cy="265" rx="105" ry="11" fill="#dce1d1"/>
+            <g class="floating-house">
+              <path d="M149 129l69-64 73 64v125H149Z" fill="#d6dfc4" stroke="#304537" stroke-width="2.5"/>
+              <path d="m134 134 84-79 88 79-14 12-74-67-70 67Z" fill="#304537"/>
+              <path d="M242 58h23v53l-23-23Z" fill="#304537"/>
+              <path d="M169 165q0-20 17-20t17 20v29h-34Z" fill="#f4cf78" stroke="#304537" stroke-width="2"/>
+              <path d="M237 165q0-20 17-20t17 20v29h-34Z" fill="#f4cf78" stroke="#304537" stroke-width="2"/>
+              <path d="M186 146v48m-17-24h34m51-24v48m-17-24h34" stroke="#304537" stroke-width="2"/>
+              <path d="M202 254v-35q0-19 17-19t17 19v35" fill="#304537"/>
+              <circle cx="228" cy="233" r="2" fill="#f4cf78"/>
+              <circle cx="218" cy="122" r="12" fill="#f6f2e8" stroke="#304537" stroke-width="2"/>
+              <path d="M218 115v7l5 3" stroke="#304537" fill="none" stroke-width="2"/>
+              <path d="M146 254h149" stroke="#304537" stroke-width="3"/>
+            </g>
+            <g class="hero-ghost ghost-one" transform="translate(35 143) rotate(-13)">
+              <use href="#ghost" width="105" height="112" style="color:#fffdf5"/>
+            </g>
+            <g class="hero-ghost ghost-two" transform="translate(305 156) rotate(12)">
+              <use href="#ghost" width="89" height="95" style="color:#fffdf5"/>
+            </g>
+            <g fill="#bb582f">
+              <use href="#spark" x="110" y="75" width="23" height="23"/>
+              <use href="#spark" x="345" y="116" width="16" height="16"/>
+              <use href="#spark" x="93" y="245" width="12" height="12"/>
+            </g>
+            <path d="M327 268v-37m0 17 12-13m-12 22-11-12m-207 22v-29m0 13-9-9m9 17 8-8" stroke="#647957" fill="none" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <span class="art-caption">good things happen, one ghost at a time.</span>
+        </div>
+      </section>
+
+      <section class="progress-strip" aria-label="Your progress">
+        <div class="progress-message"><svg aria-hidden="true"><use href="#spark"/></svg><p id="progress-message">Every small step counts.</p></div>
+        <div class="progress-track"><span id="progress-fill"></span></div>
+        <span class="progress-count" id="progress-count">0 of 0 released</span>
+      </section>
+
+      <div class="workspace">
+        <section class="task-area" id="hauntings" aria-labelledby="tasks-heading">
+          <div class="section-heading">
+            <div><p class="eyebrow">YOUR CORNER OF THE AFTERLIFE</p><h2 id="tasks-heading">The haunting board<span class="tiny-star" aria-hidden="true">*</span></h2></div>
+            <span class="date-stamp" id="today-date"></span>
+          </div>
+          <div class="board-controls">
+            <div class="view-tabs" role="group" aria-label="Task status">
+              <button class="view-tab active" id="active-tab" aria-pressed="true">Haunting <span id="active-count">0</span></button>
+              <button class="view-tab" id="released-tab" aria-pressed="false">At peace <span id="released-count">0</span></button>
+            </div>
+            <label class="sort-control"><span class="sr-only">Sort tasks</span><select id="sort-select"><option value="priority">Priority first</option><option value="due">Due date</option><option value="smallest">Smallest first</option><option value="newest">Newest first</option></select></label>
+          </div>
+          <label class="search-field"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="6" stroke="currentColor" stroke-width="1.6"/><path d="m15 15 5 5" stroke="currentColor" stroke-width="1.6"/></svg><span class="sr-only">Find a task</span><input id="search" type="search" placeholder="Find a little unfinished business..." maxlength="100"></label>
+          <div class="sample-note" id="sample-note"><span>A few sample ghosts to try. Make yourself at home.</span><button class="text-button" id="remove-samples">Clear samples</button></div>
+          <div id="storage-warning" class="warning" role="status" hidden></div>
+          <div class="task-grid" id="task-grid"></div>
+          <div class="empty-state" id="empty-state" hidden>
+            <svg aria-hidden="true"><use href="#ghost"/></svg>
+            <h3 id="empty-title">A beautifully quiet house.</h3>
+            <p id="empty-description">No unfinished business here. Enjoy the breathing room.</p>
+            <button class="button secondary" id="empty-add">Summon your first task</button>
+          </div>
+          <div class="board-footer"><span id="board-footnote">Your tasks stay in this browser.</span><div class="backup-actions"><button class="text-button" id="export-button">Export</button><span aria-hidden="true">/</span><button class="text-button" id="import-button">Import</button></div></div>
+          <input type="file" id="import-file" accept=".json,application/json" hidden>
+        </section>
+
+        <aside class="focus-panel" aria-labelledby="focus-title">
+          <div class="focus-header"><span class="eyebrow">A LITTLE QUIET TIME</span><svg aria-hidden="true"><use href="#spark"/></svg></div>
+          <h2 id="focus-title">One ghost<br>at a time.</h2>
+          <p class="focus-intro">The whole list can wait.<br>This moment is just for one thing.</p>
+          <label class="focus-task-label" for="focus-task">YOUR FOCUS</label>
+          <select id="focus-task" aria-label="Choose a task to focus on"></select>
+          <div class="timer-face" id="timer-face">
+            <svg class="timer-ghost" aria-hidden="true"><use href="#ghost"/></svg>
+            <span class="timer-time" id="timer-time" role="timer" aria-label="Time remaining">25:00</span>
+            <span class="timer-label" id="timer-label">a little pocket of time</span>
+          </div>
+          <div class="duration-options" role="group" aria-label="Focus duration">
+            <button data-duration="5" aria-pressed="false">5 min</button>
+            <button data-duration="15" aria-pressed="false">15 min</button>
+            <button data-duration="25" aria-pressed="true" class="selected">25 min</button>
+          </div>
+          <button class="button focus-button" id="timer-toggle">Start a little focus <span aria-hidden="true">&#8594;</span></button>
+          <button class="text-button reset-timer" id="timer-reset">Start over</button>
+          <p class="focus-result" id="focus-result" role="status"></p>
+          <button class="button release-focused" id="release-focused" hidden>Done? Let this ghost go</button>
+          <div class="focus-bottom"><span aria-hidden="true">*</span><span>No rush. Just a little intention.</span></div>
+        </aside>
+      </div>
+
+      <section class="closing-note"><span aria-hidden="true">&#10022;</span><p>You don't have to do it all.<br><em>One less haunting is enough for today.</em></p><span aria-hidden="true">&#10022;</span></section>
+    </main>
+    <footer class="site-footer"><span class="footer-brand">GhostList.</span><span>Made for small wins &amp; lighter minds.</span><button class="text-button" id="privacy-button">Your data, your business <span aria-hidden="true">&#8599;</span></button></footer>
+  </div>
+
+  <dialog class="task-dialog" id="task-dialog" aria-labelledby="dialog-title">
+    <form id="task-form">
+      <div class="dialog-top"><p class="eyebrow">LET'S GIVE IT A NAME</p><button type="button" class="icon-button" id="close-dialog" aria-label="Close task form">&#215;</button></div>
+      <h2 id="dialog-title">A new little ghost.</h2>
+      <p class="dialog-subtitle">Big things get smaller when you write them down.</p>
+      <label for="task-title">What's on your mind?</label>
+      <input id="task-title" name="title" required maxlength="100" placeholder="e.g. Send the first draft" autocomplete="off">
+      <label for="task-notes">A little more detail <span>(optional)</span></label>
+      <textarea id="task-notes" name="notes" maxlength="500" rows="3" placeholder="What's the smallest next step?"></textarea>
+      <div class="form-columns"><div><label for="task-priority">How loud is this ghost?</label><select id="task-priority" name="priority"><option value="low">A quiet whisper</option><option value="medium" selected>A little nudge</option><option value="high">Needs attention</option></select></div><div><label for="task-estimate">A small time estimate</label><select id="task-estimate" name="estimate"><option value="5">5 minutes</option><option value="15">15 minutes</option><option value="25" selected>25 minutes</option><option value="50">50 minutes</option></select></div></div>
+      <label for="task-due">A date to aim for <span>(optional)</span></label>
+      <input id="task-due" name="due" type="date" min="1900-01-01" max="9999-12-31">
+      <p id="form-error" class="form-error" role="alert"></p>
+      <div class="dialog-actions"><button type="button" class="text-button" id="cancel-task">Maybe later</button><button class="button primary" type="submit" id="save-task">Give it a home <span aria-hidden="true">+</span></button></div>
+    </form>
+  </dialog>
+
+  <dialog class="info-dialog" id="info-dialog" aria-labelledby="info-title">
+    <div class="dialog-top"><p class="eyebrow">A GOOD PLACE TO START</p><button class="icon-button" id="close-info" aria-label="Close guide">&#215;</button></div>
+    <h2 id="info-title">A little guide.</h2>
+    <div id="info-content"></div>
+    <button class="button primary" id="info-done">Got it <svg aria-hidden="true"><use href="#check"/></svg></button>
+  </dialog>
+
+  <dialog class="delete-dialog" id="delete-dialog" aria-labelledby="delete-title">
+    <p class="eyebrow">SOME THINGS CAN JUST GO</p><h2 id="delete-title">Let go of this task?</h2><p id="delete-description"></p>
+    <div class="dialog-actions"><button class="text-button" id="cancel-delete">Keep it</button><button class="button primary" id="confirm-delete">Remove task</button></div>
+  </dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"><span id="toast-message"></span><button id="toast-undo" hidden>Undo</button></div>
+  <noscript><div class="no-script">GhostList needs JavaScript to save and manage your tasks. Please enable it and reload.</div></noscript>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
