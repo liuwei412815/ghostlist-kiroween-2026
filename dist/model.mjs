@@ -1,5 +1,6 @@
 export const PRIORITIES = ["low", "medium", "high"];
 export const ESTIMATES = [5, 15, 25, 50];
+export const RECURRENCES = ["none", "daily", "weekly"];
 export const MAX_TASKS = 1000;
 
 export function dayKey(date = new Date()) {
@@ -22,13 +23,16 @@ export function createTask(input, now = new Date(), id = crypto.randomUUID()) {
   const title = String(input.title ?? "").trim();
   const notes = String(input.notes ?? "").trim();
   const due = String(input.due ?? "");
+  const recurrence = String(input.recurrence ?? "none");
   if (!title || title.length > 100) throw new Error("Give your ghost a name, up to 100 characters.");
   if (notes.length > 500) throw new Error("Keep the details under 500 characters.");
   if (due && !validDate(due)) throw new Error("Choose a valid date.");
   if (!PRIORITIES.includes(input.priority)) throw new Error("Choose a priority.");
   if (!ESTIMATES.includes(Number(input.estimate))) throw new Error("Choose a task size.");
+  if (!RECURRENCES.includes(recurrence)) throw new Error("Choose a valid recurrence.");
   return {
     id, title, notes, due, priority: input.priority, estimate: Number(input.estimate),
+    recurrence,
     createdAt: now.toISOString(), completedAt: null, sample: false,
   };
 }
@@ -81,9 +85,15 @@ export function parseBackup(text) {
       typeof raw.due !== "string" || typeof raw.estimate !== "number") {
       throw new Error("That backup contains an invalid or duplicate task.");
     }
-    const task = createTask(raw, new Date(raw.createdAt), raw.id);
+    // Legacy tasks without recurrence default to "none"; validate if present.
+    const recurrence = raw.recurrence != null ? raw.recurrence : "none";
+    const task = createTask({ ...raw, recurrence }, new Date(raw.createdAt), raw.id);
     task.completedAt = raw.completedAt ? new Date(raw.completedAt).toISOString() : null;
     task.sample = raw.sample === true;
+    // Preserve source linkage fields if present and valid.
+    if (typeof raw.spawnedFrom === "string" && /^[A-Za-z0-9_-]{1,100}$/.test(raw.spawnedFrom)) {
+      task.spawnedFrom = raw.spawnedFrom;
+    }
     ids.add(task.id);
     return task;
   });
@@ -98,6 +108,48 @@ export function mergeTasks(current, incoming) {
     throw new Error(`Keep your library under ${MAX_TASKS} tasks.`);
   }
   return { tasks: [...current, ...added], added: added.length };
+}
+
+/**
+ * Compute the next due date for a recurring task.
+ * Uses the task's due date if valid; otherwise falls back to today (dayKey(now)).
+ * Adds 1 day for "daily" or 7 days for "weekly".
+ * Returns a YYYY-MM-DD string.
+ */
+export function nextDueDate(task, now = new Date()) {
+  const base = task.due && validDate(task.due) ? task.due : dayKey(now);
+  const [year, month, day] = base.split("-").map(Number);
+  const d = new Date(year, month - 1, day);
+  if (task.recurrence === "daily") {
+    d.setDate(d.getDate() + 1);
+  } else if (task.recurrence === "weekly") {
+    d.setDate(d.getDate() + 7);
+  }
+  return dayKey(d);
+}
+
+/**
+ * When a recurring task is completed, spawn a fresh active task for the next period.
+ * Prevents duplicates: if any task already has spawnedFrom === completedTask.id,
+ * do nothing and return null.
+ * Returns the new task, or null if no spawn is needed.
+ */
+export function spawnNextTask(completedTask, allTasks, now = new Date()) {
+  if (!completedTask.recurrence || completedTask.recurrence === "none") return null;
+  // Prevent duplicate: a next task already exists for this completed task.
+  const alreadySpawned = allTasks.some(t => t.spawnedFrom === completedTask.id);
+  if (alreadySpawned || allTasks.length >= MAX_TASKS) return null;
+  const due = nextDueDate(completedTask, now);
+  const next = createTask({
+    title: completedTask.title,
+    notes: completedTask.notes,
+    priority: completedTask.priority,
+    estimate: completedTask.estimate,
+    recurrence: completedTask.recurrence,
+    due,
+  }, now);
+  next.spawnedFrom = completedTask.id;
+  return next;
 }
 
 export function makeSamples(now = new Date()) {

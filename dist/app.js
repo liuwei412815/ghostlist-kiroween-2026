@@ -1,6 +1,6 @@
 import {
   MAX_TASKS, createTask, dayKey, isOverdue, makeSamples, mergeTasks,
-  parseBackup, remainingSeconds, selectTasks,
+  parseBackup, remainingSeconds, selectTasks, spawnNextTask,
 } from "./model.mjs";
 
 const $ = id => document.getElementById(id);
@@ -148,6 +148,12 @@ function renderCard(task, index) {
   const due = el("span", isOverdue(task) ? "due-late" : "", dueLabel(task));
   if (task.due) due.title = `Target date: ${task.due}`;
   meta.append(time, due);
+  if (task.recurrence && task.recurrence !== "none") {
+    const rec = el("span", "meta-recurrence");
+    rec.textContent = task.recurrence === "daily" ? "\u21ba daily" : "\u21ba weekly";
+    rec.title = task.recurrence === "daily" ? "Repeats every day" : "Repeats every week";
+    meta.append(rec);
+  }
   const bottom = el("div", "card-bottom");
   if (task.completedAt) {
     bottom.append(button("release-button", "Bring it back", () => restoreTask(task.id), `Restore ${task.title}`));
@@ -236,6 +242,7 @@ function openTask(id = null) {
     $("task-priority").value = task.priority;
     $("task-estimate").value = String(task.estimate);
     $("task-due").value = task.due;
+    $("task-recurrence").value = task.recurrence ?? "none";
   }
   $("task-dialog").showModal();
   $("task-title").focus();
@@ -251,6 +258,7 @@ function saveTask(event) {
     const task = createTask(input, old ? new Date(old.createdAt) : new Date(), old?.id);
     if (old) {
       task.completedAt = old.completedAt;
+      if (old.spawnedFrom) task.spawnedFrom = old.spawnedFrom;
       tasks = tasks.map(item => item.id === old.id ? task : item);
     } else {
       tasks.push(task);
@@ -268,6 +276,9 @@ function releaseTask(id, card = null) {
   const task = tasks.find(item => item.id === id);
   if (!task || task.completedAt) return;
   task.completedAt = new Date().toISOString();
+  // Spawn the next occurrence for recurring tasks, if one doesn't already exist.
+  const next = spawnNextTask(task, tasks);
+  if (next) tasks.push(next);
   persist();
   if (focusId === id) resetTimer(false);
   const finish = () => {

@@ -1,8 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
-  createTask, dayKey, isOverdue, makeSamples, mergeTasks, parseBackup,
-  remainingSeconds, selectTasks, validDate,
+  createTask, dayKey, isOverdue, makeSamples, mergeTasks, nextDueDate,
+  parseBackup, remainingSeconds, selectTasks, spawnNextTask, validDate,
 } from "../dist/model.mjs";
 
 const now = new Date("2026-10-31T12:00:00Z");
@@ -62,6 +62,33 @@ test("backup roundtrip preserves actual tasks and rejects damaged data", () => {
   assert.throws(() => parseBackup(" ".repeat(1500001)));
 });
 
+test("legacy backups without recurrence field are accepted with default 'none'", () => {
+  const legacyTask = task();
+  const raw = { ...legacyTask };
+  delete raw.recurrence;
+  const restored = parseBackup(backup([raw]));
+  assert.equal(restored[0].recurrence, "none");
+  assert.equal(restored[0].title, legacyTask.title);
+});
+
+test("backup rejects invalid recurrence value", () => {
+  const bad = { ...task(), recurrence: "monthly" };
+  assert.throws(() => parseBackup(backup([bad])));
+});
+
+test("backup preserves spawnedFrom linkage when valid", () => {
+  const parent = task({}, "parent-1");
+  const child = { ...task({ title: "Child" }, "child-1"), spawnedFrom: "parent-1", recurrence: "daily" };
+  const restored = parseBackup(backup([parent, child]));
+  assert.equal(restored[1].spawnedFrom, "parent-1");
+});
+
+test("backup ignores invalid spawnedFrom values", () => {
+  const bad = { ...task({ recurrence: "daily" }, "task-x"), spawnedFrom: "<bad!>" };
+  const restored = parseBackup(backup([bad]));
+  assert.equal(restored[0].spawnedFrom, undefined);
+});
+
 test("restoring an older backup never overwrites a newer existing task", () => {
   const current = { ...task(), completedAt: now.toISOString() };
   const merged = mergeTasks([current], [task(), task({ title: "Second" }, "task-2")]);
@@ -89,4 +116,127 @@ test("samples use relative dates across month and year boundaries", () => {
   const samples = makeSamples(new Date(2027, 0, 1, 12));
   assert.deepEqual(samples.map(x => x.due), ["2026-12-31", "2027-01-01", "2027-01-02"]);
   assert.ok(samples.every(x => x.sample && !x.completedAt));
+});
+
+// --- Recurrence validation ---
+
+test("createTask accepts valid recurrence values", () => {
+  assert.equal(task({ recurrence: "none" }).recurrence, "none");
+  assert.equal(task({ recurrence: "daily" }).recurrence, "daily");
+  assert.equal(task({ recurrence: "weekly" }).recurrence, "weekly");
+});
+
+test("createTask defaults recurrence to 'none' when omitted", () => {
+  const t = createTask({ title: "Ghost", priority: "low", estimate: 5, notes: "", due: "" }, now);
+  assert.equal(t.recurrence, "none");
+});
+
+test("createTask rejects invalid recurrence value", () => {
+  assert.throws(() => task({ recurrence: "monthly" }));
+  assert.throws(() => task({ recurrence: "" }));
+  assert.throws(() => task({ recurrence: "DAILY" }));
+});
+
+// --- nextDueDate ---
+
+test("nextDueDate adds one day for daily recurrence", () => {
+  const t = task({ due: "2026-10-31", recurrence: "daily" });
+  assert.equal(nextDueDate(t, now), "2026-11-01");
+});
+
+test("nextDueDate adds seven days for weekly recurrence", () => {
+  const t = task({ due: "2026-10-31", recurrence: "weekly" });
+  assert.equal(nextDueDate(t, now), "2026-11-07");
+});
+
+test("nextDueDate rolls over at end of month", () => {
+  const t = task({ due: "2026-10-31", recurrence: "daily" });
+  assert.equal(nextDueDate(t, now), "2026-11-01");
+});
+
+test("nextDueDate rolls over at end of year", () => {
+  const t = task({ due: "2026-12-31", recurrence: "daily" });
+  assert.equal(nextDueDate(t, now), "2027-01-01");
+  const tw = task({ due: "2026-12-25", recurrence: "weekly" });
+  assert.equal(nextDueDate(tw, now), "2027-01-01");
+});
+
+test("nextDueDate handles leap day rollover correctly", () => {
+  // Feb 28 + 1 day in non-leap year → Mar 1
+  const tNonLeap = task({ due: "2026-02-28", recurrence: "daily" });
+  assert.equal(nextDueDate(tNonLeap, now), "2026-03-01");
+  // Feb 28 + 1 day in leap year → Feb 29
+  const tLeap = task({ due: "2028-02-28", recurrence: "daily" });
+  assert.equal(nextDueDate(tLeap, now), "2028-02-29");
+  // Feb 29 + 1 day in leap year → Mar 1
+  const tLeapDay = task({ due: "2028-02-29", recurrence: "daily" });
+  assert.equal(nextDueDate(tLeapDay, now), "2028-03-01");
+  // Feb 22 + 7 days in leap year → Feb 29
+  const tLeapWeek = task({ due: "2028-02-22", recurrence: "weekly" });
+  assert.equal(nextDueDate(tLeapWeek, now), "2028-02-29");
+});
+
+test("nextDueDate falls back to today when due is empty", () => {
+  const t = task({ due: "", recurrence: "daily" });
+  // now is 2026-10-31T12:00:00Z; local date is the same in most zones,
+  // but we pass now explicitly so the result is deterministic.
+  const localToday = dayKey(now);
+  const [y, m, d] = localToday.split("-").map(Number);
+  const tomorrow = new Date(y, m - 1, d + 1);
+  assert.equal(nextDueDate(t, now), dayKey(tomorrow));
+});
+
+// --- spawnNextTask ---
+
+test("spawnNextTask creates a new active task for daily recurrence", () => {
+  const parent = { ...task({ due: "2026-10-31", recurrence: "daily" }), completedAt: now.toISOString() };
+  const next = spawnNextTask(parent, [parent], now);
+  assert.ok(next, "next task should be created");
+  assert.equal(next.due, "2026-11-01");
+  assert.equal(next.recurrence, "daily");
+  assert.equal(next.title, parent.title);
+  assert.equal(next.completedAt, null);
+  assert.notEqual(next.id, parent.id);
+  assert.equal(next.spawnedFrom, parent.id);
+});
+
+test("spawnNextTask creates a new active task for weekly recurrence", () => {
+  const parent = { ...task({ due: "2026-10-31", recurrence: "weekly" }), completedAt: now.toISOString() };
+  const next = spawnNextTask(parent, [parent], now);
+  assert.ok(next);
+  assert.equal(next.due, "2026-11-07");
+  assert.equal(next.recurrence, "weekly");
+  assert.equal(next.spawnedFrom, parent.id);
+});
+
+test("spawnNextTask returns null for non-recurring tasks", () => {
+  const parent = { ...task({ due: "2026-10-31", recurrence: "none" }), completedAt: now.toISOString() };
+  assert.equal(spawnNextTask(parent, [parent], now), null);
+});
+
+test("spawnNextTask prevents duplicate: does not spawn if next task already exists", () => {
+  const parent = { ...task({ due: "2026-10-31", recurrence: "daily" }, "p-1"), completedAt: now.toISOString() };
+  // Simulate an already-spawned next task
+  const existing = { ...task({ due: "2026-11-01", recurrence: "daily" }, "c-1"), spawnedFrom: "p-1" };
+  const result = spawnNextTask(parent, [parent, existing], now);
+  assert.equal(result, null);
+});
+
+test("spawnNextTask does not duplicate a next task after the original is restored", () => {
+  const parent = { ...task({ due: "2026-10-31", recurrence: "daily" }, "p-1"), completedAt: now.toISOString() };
+  const completedChild = {
+    ...task({ due: "2026-11-01", recurrence: "daily" }, "c-1"),
+    completedAt: now.toISOString(),
+    spawnedFrom: "p-1",
+  };
+  const result = spawnNextTask(parent, [parent, completedChild], now);
+  assert.equal(result, null);
+});
+
+test("spawnNextTask does not exceed the task limit", () => {
+  const parent = { ...task({ recurrence: "daily" }, "p-1"), completedAt: now.toISOString() };
+  const fullBoard = Array.from({ length: 1000 }, (_, index) =>
+    index === 0 ? parent : task({ title: `Ghost ${index}` }, `task-${index}`)
+  );
+  assert.equal(spawnNextTask(parent, fullBoard, now), null);
 });

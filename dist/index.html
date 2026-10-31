@@ -169,6 +169,8 @@
       <div class="form-columns"><div><label for="task-priority">How loud is this ghost?</label><select id="task-priority" name="priority"><option value="low">A quiet whisper</option><option value="medium" selected>A little nudge</option><option value="high">Needs attention</option></select></div><div><label for="task-estimate">A small time estimate</label><select id="task-estimate" name="estimate"><option value="5">5 minutes</option><option value="15">15 minutes</option><option value="25" selected>25 minutes</option><option value="50">50 minutes</option></select></div></div>
       <label for="task-due">A date to aim for <span>(optional)</span></label>
       <input id="task-due" name="due" type="date" min="1900-01-01" max="9999-12-31">
+      <label for="task-recurrence">Does this come back? <span>(optional)</span></label>
+      <select id="task-recurrence" name="recurrence"><option value="none" selected>Just once</option><option value="daily">Every day</option><option value="weekly">Every week</option></select>
       <p id="form-error" class="form-error" role="alert"></p>
       <div class="dialog-actions"><button type="button" class="text-button" id="cancel-task">Maybe later</button><button class="button primary" type="submit" id="save-task">Give it a home <span aria-hidden="true">+</span></button></div>
     </form>

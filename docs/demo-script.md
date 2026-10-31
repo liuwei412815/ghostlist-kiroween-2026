@@ -13,10 +13,11 @@ haunting you. Give them a home, focus on one, and let it go."
 ## 0:12-0:35 - Create something real
 
 Click Summon a task. Add "Finish the first draft", with the note "Write the
-opening paragraph", a medium priority and a 15-minute estimate. Save.
+opening paragraph", a medium priority, a 15-minute estimate and a daily repeat.
+Save.
 
 "A task can be as small as one next step. I can add a priority, a rough time
-estimate, and a date if that helps."
+estimate, and a date if that helps. A recurring task comes back when I need it."
 
 ## 0:35-0:55 - Focus
 
@@ -32,7 +33,8 @@ Click Let it go. Show the animation, then click At peace. Restore the task if
 useful to demonstrate a change of plans.
 
 "When I'm done, the ghost disappears from the active board. It isn't lost:
-finished tasks live here, and I can bring one back."
+finished tasks live here, and I can bring one back. The next daily occurrence is
+created automatically instead of making me duplicate the task by hand."
 
 ## 1:15-1:30 - Data and accessibility
 
@@ -50,7 +52,7 @@ Return to the board.
 ## Production notes
 
 - Use only actual footage of the current build.
-- If discussing Kiro, add a short factual explanation after a real Kiro session.
+- Use the Kiro CLI session facts recorded in `docs/build-log.md`.
 - Do not show private tasks, account menus, tokens or unrelated browser tabs.
 - No copyrighted music or third-party imagery is needed.
 - Upload the final video to YouTube as Public for this hackathon's requirement.

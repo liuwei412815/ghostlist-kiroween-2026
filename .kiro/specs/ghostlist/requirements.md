@@ -18,6 +18,15 @@ Provenance: prepared by Codex as planning inputs. Kiro validation is pending.
 3. The remaining time shall follow elapsed time across background-tab throttling.
 4. Finishing a timer shall not automatically complete a task.
 
+## Recurrence
+
+1. A task shall optionally repeat daily or weekly.
+2. Completing a recurring task shall create one next task from its due date.
+3. The next task shall retain the task details and recurrence.
+4. Restoring and re-completing a parent shall not create a duplicate next task.
+5. Automatic creation shall respect the maximum task count.
+6. Older backups without recurrence data shall remain importable.
+
 ## Data
 
 1. Task content shall remain in browser storage unless the user exports it.

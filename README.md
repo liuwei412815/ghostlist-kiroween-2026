@@ -24,17 +24,29 @@ the contents of `dist/`.
 
 - Create, edit, remove and restore tasks.
 - Three priorities, optional target dates and 5/15/25/50-minute estimates.
+- Optional daily or weekly recurrence: completing a recurring task automatically
+  creates the next occurrence with the correct due date. A second next task is
+  never created for the same completed task.
 - Search, sorting, active/completed views and daily completion counts.
 - Completion animation, an undo action and a reduced-motion alternative.
 - 5-, 15- and 25-minute focus sessions with pause, resume and reset.
 - Timer recovery in the current tab, based on an absolute deadline.
 - Local browser persistence and updates from other tabs on the same origin.
-- JSON export and validated, non-destructive import.
+- JSON export and validated, non-destructive import (backward-compatible with
+  pre-recurrence backups; the `recurrence` field defaults to `"none"` when absent).
 - Responsive layout, keyboard shortcuts, native dialogs and labelled controls.
 - Three clearly identified sample tasks to explore on first use.
 
 There is no task server, account system, AI runtime or cross-device sync.
 Hosting the app privately may add a hosting-provider access check.
+
+## Demo
+
+An actual 56-second application walkthrough is included at
+`docs/demo.mp4`. It records the working local build, including creating a
+recurring task, starting a focus session, releasing the completed task, and
+showing the next occurrence. The narration explicitly distinguishes the Kiro CLI
+work from the earlier Codex-authored prototype.
 
 ## Privacy and data
 
@@ -71,17 +83,18 @@ preservation, maximum size and elapsed-time timer behavior.
 - `tests/model.test.mjs`: dependency-free Node test suite.
 - `.kiro/`: proposed specifications and steering for a subsequent Kiro session.
 - `docs/`: draft submission text, demo plan and actual build provenance.
+- `docs/kiro-build.md`: factual record of the Kiro CLI development session.
 
 ## Kiroween status
 
 Planned category: **Costume Contest**.
 
-This version was prepared with Codex on October 31, 2026. Kiro has **not yet**
-been used to implement or validate it. The `.kiro/` files are planning inputs,
-not proof of Kiro use. Do not describe this version as Kiro-built.
+The initial prototype was prepared with Codex on October 31, 2026. The recurring
+task feature (recurrence field, next-occurrence spawning, duplicate prevention,
+backward-compatible import and extended test suite) was implemented by Kiro on
+October 31, 2026. See `docs/build-log.md` for the full record.
 
-Before final hackathon submission, complete a substantive development session in
-Kiro and document what actually happened; publish the source to a public GitHub
+Before final hackathon submission, publish the source to a public GitHub
 repository; make a public functional demo available; and record and publish an
 actual demo on YouTube. `docs/build-log.md` tracks this distinction.
 

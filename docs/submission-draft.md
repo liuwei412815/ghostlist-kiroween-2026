@@ -1,7 +1,7 @@
 # Devpost draft
 
-Status: Draft only. Public links and real Kiro usage must be completed before
-final submission. Do not substitute placeholders for real URLs in the form.
+Status: Draft. Kiro implementation is complete; public links and final submission
+still need to be completed. Do not substitute placeholders for real URLs.
 
 ## Project name
 
@@ -34,6 +34,10 @@ The app supports editing, search, sorting, undo and restoring completed tasks.
 Tasks stay in your browser. JSON export and import let you keep your own backup
 without creating an account.
 
+Daily and weekly tasks can return automatically. Finishing one creates the next
+occurrence from its local calendar date and keeps a source link so restoring and
+finishing the original cannot produce a duplicate.
+
 ## How we built it
 
 The current prototype uses semantic HTML, CSS, vanilla JavaScript and the
@@ -45,8 +49,10 @@ The focus timer uses a deadline rather than counting interval ticks. This keeps
 it honest when the browser slows down background tabs. Backup import validates
 the entire file first and preserves the user's current copy of an existing task.
 
-Development provenance: this initial prototype was prepared with Codex.
-A Kiro development session is still required for the hackathon entry.
+Development provenance: the initial prototype was prepared with Codex. Kiro CLI
+2.37 then implemented the recurring-task system, compatibility handling and 18
+new tests, taking 4.90 credits in a 6m32s agent session. Codex performed the final
+edge-case audit after that session.
 
 ## Challenges we ran into
 
@@ -81,9 +87,14 @@ Only add Kiro to this list after actual usage is documented.
 
 ## Kiro usage field
 
-Pending. Replace this section with a factual account of the Kiro features used,
-the files changed, decisions made and verification performed. The existence of
-`.kiro/` planning files alone is not evidence of Kiro development.
+I used Kiro CLI 2.37 in the project root with Kiro's V3 agent and workspace trust.
+It read the README, task model, UI, tests, steering documents and spec. It then
+implemented daily/weekly recurrence in the task model and dialog, generated the
+next occurrence on completion, added source linkage for duplicate prevention,
+extended backup compatibility, updated the documentation and tests, and ran the
+test suite and syntax checks. Kiro reported 4.90 credits over 6m32s and finished
+with 27/27 tests passing. I then audited the edge cases and added one more test,
+bringing the verified suite to 28 tests.
 
 ## Links still required
 

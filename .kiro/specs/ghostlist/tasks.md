@@ -11,7 +11,8 @@ state and follow-up work. They are not a Kiro execution log.
 - [x] Run model tests and syntax checks.
 - [x] Verify core task flows in Chrome and review desktop/mobile layout.
 - [ ] Complete the file-chooser import check after browser upload access is enabled.
-- [ ] Complete and document substantive development using Kiro.
+- [x] Complete and document substantive development using Kiro.
+- [x] Verify Kiro-added recurrence flow in a real browser.
 - [ ] Publish a public GitHub repository with the license and `.kiro/`.
 - [ ] Record actual footage and publish the YouTube demo.
 - [ ] Verify judge access to the live application.
