@@ -8,6 +8,9 @@ you are done. The Halloween treatment is part of the interaction: priority
 changes a ghost's card, completion sends it away, and the "At peace" view keeps
 finished tasks available without making them compete for attention.
 
+- Live demo: https://ghostlist-kiroween-2026.poeticharp22.chatgpt.site
+- Source: https://github.com/liuwei412815/ghostlist-kiroween-2026
+
 ## Run
 
 Requires Node.js 20 or newer. There are no runtime packages to install.
@@ -47,6 +50,9 @@ An actual 56-second application walkthrough is included at
 recurring task, starting a focus session, releasing the completed task, and
 showing the next occurrence. The narration explicitly distinguishes the Kiro CLI
 work from the earlier Codex-authored prototype.
+
+The video is also prepared for submission through the required YouTube field in
+Devpost. The repository copy is available for verification before that upload.
 
 ## Privacy and data
 

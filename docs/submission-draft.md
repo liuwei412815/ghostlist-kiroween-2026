@@ -98,6 +98,6 @@ bringing the verified suite to 28 tests.
 
 ## Links still required
 
-- Public functional demo URL, accessible to judges.
-- Public GitHub repository URL with MIT license and `.kiro/` tracked.
+- Public functional demo: https://ghostlist-kiroween-2026.poeticharp22.chatgpt.site
+- Public GitHub repository: https://github.com/liuwei412815/ghostlist-kiroween-2026
 - Public YouTube demo URL, ideally under 3 minutes.
